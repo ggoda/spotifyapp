@@ -157,50 +157,50 @@ def insertUserSong(username, song, songid):
     else:
         userid = insertUser(username, rep, BASEREP)
     addUserSongRelation(userid, songid)
-
-# how to connect to the database and initalize variables, the cursor and connection are need for the functions to work,
-# you need to figure out how to give each of the functions access to both the connection and the cursor
-conn = sqlite3.connect('song.db')
-conn.row_factory = make_dicts
-c = conn.cursor()
-
-# deletes all rows from all databases before every run
-c.execute('DELETE FROM user')
-c.execute('DELETE FROM artist')
-c.execute('DELETE FROM song')
-c.execute('DELETE FROM user_song')
-c.execute('DELETE FROM artist_song')
-
-# test cases
-
-BASEREP = 5
-firstSong = "Throw some mo"
-firstArtists = ["Nikki Minaj", "Rae Sremmurd"]
-firstUser = "wonnor"
-secondSong = "No Type"
-secondArtists = ["Rae Sremmurd"]
-secondUser = "nhoran"
-
-# Connor adds first song
-insertArtistSong(firstArtists, firstSong, 1, 10)
-insertUserSong(firstUser, firstSong, 1)
-
-# Connor adds second song
-insertArtistSong(secondArtists, secondSong, 2, 10)
-insertUserSong(firstUser, secondSong, 2)
-
-# Nate adds second song
-insertArtistSong(secondArtists, secondSong, 2, 15)
-insertUserSong(secondUser, secondSong, 2)
-
-# Connor plays second song again
-insertUserSong(firstUser, secondSong, 2)
-
-print firstUser, "has a reputation of", getUserRep(firstUser), "and has added:", getUserSongs(firstUser)
-print secondUser, "has a reputation of", getUserRep(secondUser), "and has added:", getUserSongs(secondUser)
-
-print firstSong, "has a reputation of", getSongRep(1)
-print secondSong, "has a reputation of", getSongRep(2)
-
-print "Rae Sremmurd's songs:", getArtistSongs("Rae Sremmurd")
-print "Nikki Minaj's songs:", getArtistSongs("Nikki Minaj")
+if __name__ == "__MAIN__":
+        # how to connect to the database and initalize variables, the cursor and connection are need for the functions to work,
+        # you need to figure out how to give each of the functions access to both the connection and the cursor
+        conn = sqlite3.connect('song.db')
+        conn.row_factory = make_dicts
+        c = conn.cursor()
+        
+        # deletes all rows from all databases before every run
+        c.execute('DELETE FROM user')
+        c.execute('DELETE FROM artist')
+        c.execute('DELETE FROM song')
+        c.execute('DELETE FROM user_song')
+        c.execute('DELETE FROM artist_song')
+        
+        # test cases
+        
+        BASEREP = 5
+        firstSong = "Throw some mo"
+        firstArtists = ["Nikki Minaj", "Rae Sremmurd"]
+        firstUser = "wonnor"
+        secondSong = "No Type"
+        secondArtists = ["Rae Sremmurd"]
+        secondUser = "nhoran"
+        
+        # Connor adds first song
+        insertArtistSong(firstArtists, firstSong, 1, 10)
+        insertUserSong(firstUser, firstSong, 1)
+        
+        # Connor adds second song
+        insertArtistSong(secondArtists, secondSong, 2, 10)
+        insertUserSong(firstUser, secondSong, 2)
+        
+        # Nate adds second song
+        insertArtistSong(secondArtists, secondSong, 2, 15)
+        insertUserSong(secondUser, secondSong, 2)
+        
+        # Connor plays second song again
+        insertUserSong(firstUser, secondSong, 2)
+        
+        print firstUser, "has a reputation of", getUserRep(firstUser), "and has added:", getUserSongs(firstUser)
+        print secondUser, "has a reputation of", getUserRep(secondUser), "and has added:", getUserSongs(secondUser)
+        
+        print firstSong, "has a reputation of", getSongRep(1)
+        print secondSong, "has a reputation of", getSongRep(2)
+        
+        print "Rae Sremmurd's songs:", getArtistSongs("Rae Sremmurd")
+        print "Nikki Minaj's songs:", getArtistSongs("Nikki Minaj")
