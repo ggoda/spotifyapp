@@ -8,7 +8,7 @@ from urlparse import urlparse, parse_qs
 
 testqueue = [123123,231231,23123131,312312312]
 
-hostName = "http://spotapp.com/" #TODO: CHANGE THIS
+hostName = "localhost" #TODO: CHANGE THIS
 port = 80
 serverDict = {}
 workerQueue = Queue(100)
@@ -19,7 +19,7 @@ serverSongRep = {}
 
 def serverRand(): #XXX: THIS COULD BE REALLY REALLY BAD
     serverid = rand.randint(0,99999)
-    while serverDict.get(serverID) != none:
+    while serverDict.get(serverID) != None:
         serverid =rand.randint(0,99999)
     serverDict.add(serverid,[])
     serverSongRep.add(serverid, {})
@@ -27,11 +27,10 @@ def serverRand(): #XXX: THIS COULD BE REALLY REALLY BAD
  
 class factory(Thread):
     loop = True
-    def run(self):
-        queueClearer()
+
     def queueClearer(self):
-        while loop:
-            if workerQueue.isEmpty():
+        while self.loop:
+            if workerQueue.empty():
                 time.sleep(1)
             else:
                 (command, x, y) = workerQueue.get()
@@ -40,20 +39,21 @@ class factory(Thread):
                     server = userToServer(y)
                 if command == nvoat:
                     server = userToServer(y)
-                if command == addsong:
+        #        if command == addsong:
+    def run(self):
+        self.queueClearer()
     def stop(self):
         self.loop = False                    
 
 class requestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
-    def removeTilSong(songid,serverid):
-        
-        
     def do_GET(self):
+        print("Get Request")
+        print(self.path)
         params = parse_qs(urlparse(self.path).query)
         if 'currentsong' in self.path:
             serverid = params.get(serverid)
             songid = params.get(songid)
-            if serverid == none or songid == none
+            if serverid == None or songid == None:
                 self.send_response(200)
                 self.send_headers("Content-type", "text")
                 self.end_header()
@@ -62,14 +62,14 @@ class requestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             
         if 'queue' in self.path:
             serverid = params.get(serverid)
-            if serverid == none:
+            if serverid == None:
                 self.send_response(200)
                 self.send_headers("Content-type", "text")
                 self.end_header()
                 self.wfile.write("Failure: 389")
                 return
             queuelist = serverDict.get(serverid)
-            if queuelist == none:   
+            if queuelist == None:   
                 self.send_response(200)
                 self.send_headers("Content-type", "text")
                 self.end_header()
@@ -83,13 +83,13 @@ class requestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         if 'connect' in self.path:
             userid = params.get(userid)
             serverid = params.get(serverid)
-            if serverid == none or userid == none:
+            if serverid == None or userid == None:
                 self.send_response(200)
                 self.send_headers("Content-type", "text")
                 self.end_header()
                 self.wfile.write("Failure: 389")
                 return
-            if serverDict.get(serverid) == none:
+            if serverDict.get(serverid) == None:
                 self.send_response(200)
                 self.send_headers("Content-type", "text")
                 self.end_header()
@@ -105,13 +105,13 @@ class requestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         if 'addsong' in self.path:
             songid = params.get(songid)
             userid = params.get(userid)
-            if songid == none or userid == none:
+            if songid == None or userid == None:
                 self.send_response(200)
                 self.send_headers("Content-type", "text")
                 self.end_header()
                 self.wfile.write("Failure: 389")
                 return
-            if userToServer.get(userid) == none:
+            if userToServer.get(userid) == None:
                 self.send_response(200)
                 self.send_headers("Content-type", "text")
                 self.end_header()
@@ -127,13 +127,13 @@ class requestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             songid = params.get(songid)
             voat = params.get(voat)
             userid = params.get(userid)
-            if voat == none or songid == none or userid == none:
+            if voat == None or songid == None or userid == None:
                 self.send_response(200)
                 self.send_headers("Content-type", "text")
                 self.end_header()
                 self.wfile.write("Failure: 389")
                 return
-            if userToServer.get(userid) == none:
+            if userToServer.get(userid) == None:
                 self.send_response(200)
                 self.send_headers("Content-type", "text")
                 self.end_header()
@@ -163,7 +163,7 @@ class requestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             self.wfile.write("<html><head><title>invalid request 502</title></head></html>")
             return
 
-def run():
+def run(factoryn):
     server_class = BaseHTTPServer.HTTPServer
     print("server starting on port 80")
     httpd = server_class((hostName,port),requestHandler)
@@ -173,11 +173,13 @@ def run():
     except KeyboardInterrupt:
         pass
     httpd.server_close()
+    factoryn.stop()
     print("\nserver closed")
 
 if __name__ == '__main__':
-    factory.start()
-    run()   
+    factoryn = factory()
+    factoryn.start()
+    run(factoryn)   
             
                 
 
