@@ -1,7 +1,6 @@
 import sqlite3
 import datetime
 
-
 # given a username and reputation, add the user to the db if the username is unique, otherwise update their reputation.
 # returns the userid of the user
 def insertUser(username, dailyRep, totalRep):
